@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh_CN">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>右侧逐渐出现的导航</title>
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="../../vendor/jquery/dist/jquery.min.js"></script>
+	<style>
+    	.rightNav{ position:fixed; width:140px;  right:0; top:100px; _position:absolute; text-align:left; cursor:pointer; background-image:url(about:blank);  }
+	.rightNav a{ display:block; position:relative; height:30px; line-height:30px; margin-bottom:2px; background:#fff; padding-right:10px; width:130px; overflow:hidden;  cursor:pointer; right:-110px; }
+	.rightNav a:hover{ text-decoration:none; color:#39A4DC;  }
+	.rightNav a:hover em{ background:#00b700}
+	.rightNav a em{ display:block; float:left; width:30px; background:#39A4DC; color:#fff; font-size:16px; text-align:center; margin-right:10px;}
+	.rightNav a.new em{ background:#f60;  }
+    </style>
+</head>
+<body>
+	<div class="rightNav">
+		<a href="#content" style="right: -110px;"> <em>^</em>
+			回到顶部
+		</a>
+		<a href="#effect1" style="right: -110px;"> <em>1</em>
+			书签切换
+		</a>
+		<a href="#effect2" style="right: -110px;">
+			<em>2</em>
+			幻灯片
+		</a>
+		<a href="#effect3" style="right: -110px;">
+			<em>3</em>
+			图片滚动-左
+		</a>
+		<a href="#effect4" style="right: -110px;">
+			<em>4</em>
+			图片滚动-上
+		</a>
+		<a href="#effect5" style="right: -110px;">
+			<em>5</em>
+			图片无缝滚动-左
+		</a>
+		<a href="#effect6" style="right: -110px;">
+			<em>6</em>
+			图片无缝滚动-上
+		</a>
+		<a href="#effect7" style="right: -110px;">
+			<em>7</em>
+			文字滚动-左
+		</a>
+		<a href="#effect8" style="right: -110px;">
+			<em>8</em>
+			文字滚动-上
+		</a>
+		<a href="#effect9" style="right: -110px;">
+			<em>9</em>
+			文字无缝滚动-左
+		</a>
+		<a href="#effect10" style="right: -110px;">
+			<em>10</em>
+			文字无缝滚动-上
+		</a>
+		<a class="new" href="#effect11" style="right: -110px;">
+			<em>11</em>
+			常用导航 [v2.1]
+		</a>
+		<a class="new" href="#effect12" style="right: -110px;">
+			<em>12</em>
+			手风琴 [v2.1]
+		</a>
+		<a href="#effectT1" style="right: -110px;">
+			<em>T1</em>
+			其它基础效果
+		</a>
+
+	</div>
+	<script>
+	//右侧导航
+	var btb=$(".rightNav");
+	var tempS;
+	$(".rightNav").hover(function(){
+			var thisObj = $(this);
+			tempS = setTimeout(function(){
+			thisObj.find("a").each(function(i){
+				var tA=$(this);
+				setTimeout(function(){ tA.animate({right:"0"},200);},50*i);
+			});
+		},200);
+
+	},function(){
+		if(tempS){ clearTimeout(tempS); }
+		$(this).find("a").each(function(i){
+			var tA=$(this);
+			setTimeout(function(){ tA.animate({right:"-110"},200,function(){
+			});},50*i);
+		});
+
+	});
+	var isIE6 = !!window.ActiveXObject&&!window.XMLHttpRequest;
+
+	$(window).scroll(function(){ 
+		if(isIE6){ btb.css("top", $(document).scrollTop()+30) }
+	});
+</script>
+</body>
+</html>
