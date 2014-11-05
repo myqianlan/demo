@@ -1,0 +1,1 @@
+define([],function(){var a="hi";return{say:function(b){console.log(a+b)}}})

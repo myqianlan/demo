@@ -1,0 +1,1 @@
+define("tips",[],function(){var a="hi";return{say:function(b){console.log(a+b)}}}),require.config({baseUrl:"js",urlArgs:"version="+(new Date).getTime()}),require(["tips"],function(a){a.say(",tips"),require(["fly"],function(a){a.say(",fly")})}),define("page1",function(){})

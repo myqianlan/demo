@@ -1,0 +1,1 @@
+define([],function(){var a="fly";return{say:function(b){console.log(b+a)}}})
