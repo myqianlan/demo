@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>uploadify-demo</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="vendor/uploadify/uploadify.css">
+    <script src="vendor/jquery-1.11.1.min.js"></script>
+    <script src="vendor/uploadify/jquery.uploadify.min.js"></script>
+</head>
+<body>
+    <!--[if lt IE 9]>
+    <style>.browsehappy {margin: .2em;background: #ccc;color: #000;padding: .5em;}</style>
+    <p class="browsehappy">
+        您使用的浏览器 <strong>版本过低</strong>
+        ，请
+        <a href="http://browsehappy.com/">升级您的浏览器</a>
+        以获得更好的体验。
+    </p>
+    <script src="vendor/html5shiv.js"></script>
+    <![endif]-->
+    <!-- CONTENT -->
+        <div class="container">
+            <div id="fileQueue"></div>
+            <input type="file" name="uploadify" id="file_upload" />
+            <div id="haveupfile"></div>
+            <img id="upImg" />
+            <div>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('cancel','*');">取消上传（将触发onClearQueue事件）</a>
+                </div>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('destroy')">销毁（将调用Destroy）</a>
+                </div>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('disable', true);">禁用上传功能</a>
+                </div>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('disable', false);">启用上传功能</a>
+                </div>
+                <p>uploadify中的方法</p>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('cancel')">取消队列中第一个文件</a>
+                    |
+                    <a href="javascript:$('#file_upload').uploadify('cancel', '*')">取消队列中所有文件</a>
+                    |
+                    <a href="javascript:$('#file_upload').uploadify('upload', '*')">开始上传队列中所有文件</a>
+                </div>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('destroy')">销毁Uploadify实例</a>
+                </div>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('disable', true)">禁用选择按钮</a>
+                    |
+                    <a href="javascript:$('#file_upload').uploadify('disable', false)">启用选择按钮</a>
+                </div>
+                <div>
+                    <a href="javascript:changeBtnText()">改变按钮上面的文字</a>
+                    |
+                    <a href="javascript:returnBtnText();">读取按钮上面的文字</a>
+                </div>
+                <div>
+                    <a href="javascript:$('#file_upload').uploadify('upload', '*')">开始上传</a>
+                    |
+                    <a href="javascript:$('#file_upload').uploadify('stop')">停止上传</a>
+                </div>
+            </div>
+        </div>
+    <script>
+        $(function () {
+        $('#file_upload').uploadify({
+            'auto': false, //选择文件后是否自动上传，默认为true
+            'buttonClass': 'some-class',
+            //'buttonImage': 'Uploadify/icon/btn.png',//选择文件按钮   
+            'buttonText': '浏   览',//设置按钮文本
+            //'debug': true,//是否打开调试模式，默认为false
+            'fileSizeLimit': '5000KB',//单个文件大小，0为无限制，可接受KB,MB,GB等单位的字符串值
+            'fileTypeDesc': 'Image Files',//文件描述
+            'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型
+            //'formData': { 'someKey': 'someValue', 'someOtherKey': 1 },//传参数
+            //'height': 50,//按钮的高度
+            //'itemTemplate': '<div id="${fileID}" class="uploadify-queue-item">\
+            //                    <div class="cancel">\
+            //                      <a href="javascript:$(\'#${instanceID}\').uploadify(\'cancel\', \'${fileID}\')">X</a>\
+            //                    </div>\
+            //                    <span class="fileName">${fileName} (${fileSize})</span><span class="data"></span>\
+            //                 </div>',//队列中的每个项目一个特殊的HTML模板
+            //'method': 'post',//请求方式"get"或者"post",默认为"post"   
+            //'multi': false,//是否允许同时选择多个文件，默认为true
+            //'overrideEvents': ['onUploadError'],//不执行某个默认事件如：onUploadError上传失败事件  
+            //'preventCaching': false,//是否取消缓存，默认为true没有缓存
+            //'progressData': 'speed',//上传进度条显示，'percentage'or'speed'默认为'percentage'
+            'queueID': 'fileQueue',//队列的ID,一个存放上传文件div的ID
+            //'queueSizeLimit':1,//可同事选择上传文件的数量，默认为999
+            //'removeCompleted': false,//是否移除在队列中上传完成的文件，默认为true
+            //'removeTimeout': 10,//在队列中上传完成延迟多少秒移除，默认为3秒
+            //'requeueErrors': true,//上传失败是否重新上传，默认为false
+            //'successTimeout': 5,//上传成功之后等待响应时间swf成功，默认为30秒
+            'swf': 'vendor/uploadify/uploadify.swf',//FLash文件路径
+            'uploader': '/uoload.html',//上传文件处理后台页面
+            //'uploadLimit': 1,//允许上传最大文件数，超过onUploadError事件被触发，默认999
+            //'width': 300,//按钮宽度
+            /**********************************************事件***********************************************************************/
+            //'onCancel': function (file) {//取消单个文件上传触发
+            //    alert('The file ' + file.name + ' was cancelled.')
+            //},
+            //'onClearQueue': function (queueItemCount) {//取消队列中所用上传文件触发
+            //    alert(queueItemCount + ' file(s) were removed from the queue');
+            //},
+            //'onDestroy': function () {//销毁触发
+            //    alert('I am getting destroyed!');
+            //},
+            //'onDialogClose': function (queueData) {//关闭窗口时触发
+            //    //queueData属性如下
+            //    //filesSelected：在浏览文件对话框中选择文件的数量
+            //    //filesQueued：添加到队列中文件的数量（即没有返回错误）
+            //    //filesReplaced：在队列中替换的文件数
+            //    //filesCancelled：文件已被添加到队列中取消数（不更换）
+            //    //filesErrored：返回错误的文件数
+            //    alert(queueData.filesQueued + ' files were queued of ' + queueData.filesSelected + ' selected files. There are ' + queueData.queueLength + ' total files in the queue.');
+            //},
+            //'onDialogOpen': function () {//打开对话框时触发
+            //},
+            //'onDisable': function () {//禁用上传功能触发
+            //    alert('You have disabled Uploadify!');
+            //},
+            //'onEnable': function () {//启用上传功能触发
+            //    alert('You can use Uploadify again.');
+            //},
+            'onFallback': function () {//初始化浏览器不兼容触发 也可监视浏览器是否禁用flash播放插件
+                alert('Flash was not detected.');
+            },
+            //'onInit': function (instance) {//初始化时触发
+            //    alert('The queue ID is ' + instance.settings.queueID);
+            //},
+            //'onQueueComplete': function (queueData) {//队列中所有文件处理完成触发
+            //    //queueData属性如下
+            //    //uploadsSuccessful：上传的文件数量已顺利完成
+            //    //uploadsErrored：传回错误的上传数量
+            //    alert(queueData.uploadsSuccessful + ' files were successfully uploaded.');
+            //},
+            //'onSelect': function (file) {//选择文件时触发
+            //    alert('The file ' + file.name + ' was added to the queue.');
+            //},
+            //'onSelectError': function () {//选择文件出现错误时触发，如超出文件大小设置
+            //    //返回file
+            //    //返回errorCode
+            //    //返回errorMsg
+            //    //alert(errorCode);
+            //    //alert('The file ' + file.name + ' returned an error and was not added to the queue.');
+            //},
+            //'onSWFReady': function () {//当Flash对象加载触发。
+            //    alert('The Flash file is ready to go.');
+            //},
+            //'onUploadComplete': function (file) {//当上传完成后是否成功，或返回错误为每个文件触发一次
+            //    alert('The file ' + file.name + ' finished processing.');
+            //},
+            //'onUploadError': function (file, errorCode, errorMsg, errorString) {//上传文件失败时触发
+            //    alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
+            //},
+            //'onUploadProgress': function (file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {//上传进度数据
+            //    $('#progress').html(totalBytesUploaded + ' bytes uploaded of ' + totalBytesTotal + ' bytes.');
+            //},
+            //'onUploadStart': function (file) {//开始上传触发
+            //    alert('Starting to upload ' + file.name);
+            //},
+            'onUploadSuccess': function (file, data, response) {//上传成功后触发，每个文件都触发
+                alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+                $("#upImg").attr("src", data);
+            }
+        });
+    });
+    function changeBtnText() {
+        $('#file_upload').uploadify('settings', 'buttonText', 'BROWSE');
+    }
+
+    function returnBtnText() {
+        alert('The button says ' + $('#file_upload').uploadify('settings', 'buttonText'));
+    }
+    </script>
+</body>
+</html>
