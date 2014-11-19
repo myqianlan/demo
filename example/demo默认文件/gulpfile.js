@@ -1,16 +1,21 @@
 ﻿/**
  * @author myqianlan
- * @date 2014年11月6日12:58:32
+ * @date 2014年11月19日17:12:44
  */
 // 包含gulp   
 var gulp = require('gulp');
 
 // 包含插件   
-
 // sass 编译
-var sass = require('gulp-ruby-sass');
-// 合并
-
+var sass = require('gulp-sass');
+//sourcemaps
+var sourcemaps = require('gulp-sourcemaps');
+// 压缩JS
+var uglify = require('gulp-uglify');
+// 压缩CSS
+var minifycss = require('gulp-minify-css');
+// 重命名
+var rename = require('gulp-rename');
 // 自动加CSS浏览器前缀
 var autoprefixer = require('gulp-autoprefixer');
 
@@ -32,28 +37,46 @@ gulp.task('server', function() {
     open(protocol + '://' + host + ':' + port + '/index.html');
 });
 
-
 // Compile SASS  
-
+// with node sass
 gulp.task('sass', function() {
     gulp.src(root + '/scss/**/*.scss')
+        .pipe(sourcemaps.init())
         .pipe(sass({
-            sourcemap: "file",
-            sourcemapPath: '../scss',
-            noCache: true,
+            errLogToConsole: true
         }))
-        .on('error', function(err) {
-            console.log(err.message);
-        })
+        .pipe(sourcemaps.write('./maps',{debug: true, includeContent: false}))
         .pipe(gulp.dest(root + '/css'));
 });
 
-// 自动添加浏览器前缀 
+// 自动添加浏览器前缀
 // By default, Autoprefixer uses > 1%, last 2 versions, Firefox ESR, Opera 12.1
 gulp.task('autoprefixer', function() {
     gulp.src(root + '/css/**/*.css')
         .pipe(autoprefixer())
         .pipe(gulp.dest(root + '/css'));
+});
+
+// 压缩JS文件 
+gulp.task('minifyjs', function() {
+    gulp.src(root + '/js/**/*.js')
+        .pipe(uglify())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(root + '/dist/js'));
+});
+
+// 压缩CSS文件   
+gulp.task('minifycss', function() {
+    gulp.src(root + '/css/**/*.css')
+        .pipe(minifycss())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(root +'/dist/css'));
+});
+//
+gulp.task('dev', ['sass'], function() {
+    // 监视scss文件的变化,并且执行sass
+    // 如果scss文件夹为空，任务会中断
+    gulp.watch(root + '/scss/**/*.scss', ['sass']);
 });
 
 // 默认任务   
@@ -73,3 +96,5 @@ gulp.task('dev', ['sass'], function() {
     // 如果scss文件夹为空，任务可能会中断
     gulp.watch(root + '/scss/**/*.scss', ['sass']);
 });
+// 构建任务
+gulp.task('build', ['minifyjs', 'sass', 'autoprefixer', 'minifycss']);
