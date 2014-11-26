@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>导航菜单 横向滚动</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/global.css">
+                    <style type="text/css">
+                        body,blockquote,button,dl,dd,fieldset,figure,h1,h2,h3,h4,h5,h6,hr,input,ul,ol,p,pre,select,textarea{margin:0;}
+                        button,th,td,fieldset,legend,input,ul,ol,select,textarea{padding:0;}
+                        body{color:#000; font:12px SimSun, "Microsoft YaHei", Arial, Helvetica, sans-serif;}
+                        li{list-style-type:none;}
+                        
+                        a{color:#000; text-decoration:none;}
+                        a:hover{color:#ff0000;}
+                        #nav{width:1000px; height:200px; background-color:yellow; margin:0 auto;}
+                        #nav ul{display:inline-block; width:1000px; background-color:green; list-style:none;}
+                        #nav ul li{float:left; padding:0 20px;}
+                        #nav .curBg{display:inline; float:left; width:72px; height:3px; background-color:#ff0000; overflow:hidden;}
+                        #nav .cur{background-color:yellow;}
+                </style>
+    </head>
+<body>
+    <!--[if lt IE 9]>
+    <style>.browsehappy {margin: .2em;background: #ccc;color: #000;padding: .5em;}</style>
+    <p class="browsehappy">
+        您使用的浏览器 <strong>版本过低</strong>
+        ，请
+        <a href="http://browsehappy.com/">升级您的浏览器</a>
+        以获得更好的体验。
+    </p>
+    <script src="vendor/html5shiv.js"></script>
+    <![endif]-->
+    <!-- CONTENT -->
+    <h1>导航菜单 横向滚动</h1>
+     <div id="nav">
+            <ul>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">首页</a></li>
+            </ul>
+            <div class="curBg"></div>
+        </div>
+     <script src="vendor/jquery-1.11.1.min.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
